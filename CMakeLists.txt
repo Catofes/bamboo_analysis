@@ -19,8 +19,5 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 SET(CMAKE_CXX_FLAGS "-std=c++0x -g")
 
 # link with root
-ADD_EXECUTABLE(analyzer analyzer.C BambooMCEvent.C)
-TARGET_LINK_LIBRARIES (analyzer ${ROOT_LIBRARIES})
-
 ADD_EXECUTABLE(selector selector.C DepositionSelector.C EnergyDeposition.C)
 TARGET_LINK_LIBRARIES (selector ${ROOT_LIBRARIES})
