@@ -41,7 +41,10 @@ void FluxSelector::Begin(TTree * /*tree*/)
    TString option = GetOption();
    if (!option.IsNull()) {
      Ecut = option.Atof();
+   } else {
+     Ecut = 0;
    }
+   histoThetaAll = new TH1D ("theta_all", "#theta normalized to each surface", 180, 0, 0.5*TMath::Pi());
 
    histoThetaSurfaceXP = new TH1D ("theta_xp", "#theta at X+", 180, 0, 0.5*TMath::Pi());
    histoThetaSurfaceYP = new TH1D ("theta_yp", "#theta at Y+", 180, 0, 0.5*TMath::Pi());
@@ -149,6 +152,9 @@ Bool_t FluxSelector::Process(Long64_t entry)
     if (rpy<0)
       phi = TMath::TwoPi()-phi;
     histoEAll->Fill(track_energy);
+    if (track_energy < Ecut)
+      continue;
+    histoThetaAll->Fill(theta);
     if (rsurface[i]==1) {
       histoThetaSurfaceXP->Fill(theta);
       histoCosThetaSurfaceXP->Fill(costheta);
@@ -180,8 +186,7 @@ Bool_t FluxSelector::Process(Long64_t entry)
       histoPhiSurfaceZM->Fill(phi);
       histoESurfaceZM->Fill(track_energy);
     }
-    if (track_energy>Ecut)
-      nEvents++;
+    nEvents++;
   }
   return kTRUE;
 }
@@ -200,7 +205,9 @@ void FluxSelector::Terminate()
    // a query. It always runs on the client, it can be used to present
    // the results graphically or save the results to file.
 
-  TFile outfile("flux_out.root", "RECREATE");
+  TFile outfile(out_name.Data(), "RECREATE");
+  histoThetaAll->Write();
+
   histoThetaSurfaceXP->Write();
   histoThetaSurfaceYP->Write();
   histoThetaSurfaceZP->Write();

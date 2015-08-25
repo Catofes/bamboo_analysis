@@ -73,6 +73,8 @@ public :
   TH1D * histoThetaSurfaceYM;
   TH1D * histoThetaSurfaceZM;
 
+  TH1D * histoThetaAll;
+
   TH1D * histoCosThetaSurfaceXP;
   TH1D * histoCosThetaSurfaceYP;
   TH1D * histoCosThetaSurfaceZP;
