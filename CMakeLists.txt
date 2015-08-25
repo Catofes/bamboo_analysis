@@ -19,5 +19,12 @@ SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 SET(CMAKE_CXX_FLAGS "-std=c++0x -g")
 
 # link with root
+# target selector from bamboo_ii
 ADD_EXECUTABLE(selector selector.C DepositionSelector.C EnergyDeposition.C)
 TARGET_LINK_LIBRARIES (selector ${ROOT_LIBRARIES})
+
+# target flux_analysis to analyze the angular distribution and
+# energy distribution of flux
+
+ADD_EXECUTABLE(flux_analysis flux.C FluxSelector.C)
+TARGET_LINK_LIBRARIES (flux_analysis ${ROOT_LIBRARIES})
