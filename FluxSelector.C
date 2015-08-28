@@ -240,6 +240,9 @@ void FluxSelector::Terminate()
   if (energyCut>0) {
     cout << nEvents << " with energy > " << energyCut << " was counted." << endl;
   }
+  if (!surfaceOutput) {
+    cout << nEvents << endl;
+  }
 }
 
 void FluxSelector::setOutputName(const char * name)
