@@ -38,12 +38,7 @@ void FluxSelector::Begin(TTree * /*tree*/)
    // When running with PROOF Begin() is only called on the client.
    // The tree argument is deprecated (on PROOF 0 is passed).
 
-   TString option = GetOption();
-   if (!option.IsNull()) {
-     Ecut = option.Atof();
-   } else {
-     Ecut = 0;
-   }
+  cout << "begin of selector" << endl;
    histoThetaAll = new TH1D ("theta_all", "#theta normalized to each surface", 180, 0, 0.5*TMath::Pi());
 
    histoThetaSurfaceXP = new TH1D ("theta_xp", "#theta at X+", 180, 0, 0.5*TMath::Pi());
@@ -152,7 +147,7 @@ Bool_t FluxSelector::Process(Long64_t entry)
     if (rpy<0)
       phi = TMath::TwoPi()-phi;
     histoEAll->Fill(track_energy);
-    if (track_energy < Ecut)
+    if (track_energy < energyCut)
       continue;
     histoThetaAll->Fill(theta);
     if (rsurface[i]==1) {
@@ -207,44 +202,64 @@ void FluxSelector::Terminate()
 
   TFile outfile(out_name.Data(), "RECREATE");
   histoThetaAll->Write();
-
-  histoThetaSurfaceXP->Write();
-  histoThetaSurfaceYP->Write();
-  histoThetaSurfaceZP->Write();
-
-  histoThetaSurfaceXM->Write();
-  histoThetaSurfaceYM->Write();
-  histoThetaSurfaceZM->Write();
-
-  histoCosThetaSurfaceXP->Write();
-  histoCosThetaSurfaceYP->Write();
-  histoCosThetaSurfaceZP->Write();
-
-  histoCosThetaSurfaceXM->Write();
-  histoCosThetaSurfaceYM->Write();
-  histoCosThetaSurfaceZM->Write();
-
-  histoPhiSurfaceXP->Write();
-  histoPhiSurfaceYP->Write();
-  histoPhiSurfaceZP->Write();
-
-  histoPhiSurfaceXM->Write();
-  histoPhiSurfaceYM->Write();
-  histoPhiSurfaceZM->Write();
-
   histoEAll->Write();
-  histoESurfaceXP->Write();
-  histoESurfaceYP->Write();
-  histoESurfaceZP->Write();
-  histoESurfaceXM->Write();
-  histoESurfaceYM->Write();
-  histoESurfaceZM->Write();
-  
+
+  if (surfaceOutput) {
+    histoThetaSurfaceXP->Write();
+    histoThetaSurfaceYP->Write();
+    histoThetaSurfaceZP->Write();
+
+    histoThetaSurfaceXM->Write();
+    histoThetaSurfaceYM->Write();
+    histoThetaSurfaceZM->Write();
+
+    histoCosThetaSurfaceXP->Write();
+    histoCosThetaSurfaceYP->Write();
+    histoCosThetaSurfaceZP->Write();
+
+    histoCosThetaSurfaceXM->Write();
+    histoCosThetaSurfaceYM->Write();
+    histoCosThetaSurfaceZM->Write();
+
+    histoPhiSurfaceXP->Write();
+    histoPhiSurfaceYP->Write();
+    histoPhiSurfaceZP->Write();
+
+    histoPhiSurfaceXM->Write();
+    histoPhiSurfaceYM->Write();
+    histoPhiSurfaceZM->Write();
+
+    histoESurfaceXP->Write();
+    histoESurfaceYP->Write();
+    histoESurfaceZP->Write();
+    histoESurfaceXM->Write();
+    histoESurfaceYM->Write();
+    histoESurfaceZM->Write();
+  }  
   outfile.Close();
-  cout << nEvents << " with energy > " << Ecut << " was counted." << endl;
+  if (energyCut>0) {
+    cout << nEvents << " with energy > " << energyCut << " was counted." << endl;
+  }
 }
 
 void FluxSelector::setOutputName(const char * name)
 {
   out_name = name;
+}
+
+void FluxSelector::setSurfaceOutput(Bool_t t)
+{
+  surfaceOutput = t;
+  cout << "surface output is ";
+  if (t)
+    cout << "on.";
+  else
+    cout << "off.";
+  cout << endl;
+}
+
+void FluxSelector::setEnergyCut(Double_t eCut)
+{
+  energyCut = eCut;
+  cout << "energy cut = " << energyCut << " keV." << endl;
 }

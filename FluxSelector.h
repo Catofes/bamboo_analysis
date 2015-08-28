@@ -4,8 +4,8 @@
 // from TChain mcTree/
 //////////////////////////////////////////////////////////
 
-#ifndef AngularSelector_h
-#define AngularSelector_h
+#ifndef FluxSelector_h
+#define FluxSelector_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -64,6 +64,8 @@ public :
   virtual void    Terminate();
 
   void setOutputName (const char * name);
+  void setSurfaceOutput (Bool_t t);
+  void setEnergyCut (Double_t eCut);
 
   TH1D * histoThetaSurfaceXP;
   TH1D * histoThetaSurfaceYP;
@@ -101,8 +103,9 @@ public :
   
   TString out_name;
 
-  Double_t Ecut;
+  Double_t energyCut;
   Long_t nEvents;
+  Bool_t surfaceOutput;
   //   ClassDef(FluxSelector,0);
 };
 
