@@ -103,7 +103,11 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
   // 200 ms window
   if (pd.getRunId() == npd.getRunId()
       && pd.getEventId() == npd.getEventId()
-      && pd.getT0()>0 && npd.getT0() < 0.2) {
+      && pd.getT0()>0 && npd.getT0() < 0.2
+      && ((pd.getParent().find("Rn220")==0 && npd.getParent().find("Po216")==0)
+	  || (pd.getParent().find("Bi214")==0 && npd.getParent().find("Po214")==0)
+	|| pd.getParent().find("Bi212")==0 && npd.getParent().find("Po212")==0
+	  )){
     // within the window, merge the two data.
     pd.mergeData(npd);
   } else {
