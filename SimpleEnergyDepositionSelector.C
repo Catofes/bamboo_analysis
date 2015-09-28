@@ -50,8 +50,8 @@ void SimpleEnergyDepositionSelector::SlaveBegin(TTree * /*tree*/)
 
    run_id = 0;
    outTree = new TTree("simple_out", "Simple Out Tree");
-   outTree->Branch("runId", &run_id, "runId/I");
-   outTree->Branch("eventId", &eventId, "eventId/I");
+   outTree->Branch("runId", &crun_id, "runId/I");
+   outTree->Branch("eventId", &event_id, "eventId/I");
    outTree->Branch("parent", &_parent);
    outTree->Branch("t0", &t0, "t0/D");
    outTree->Branch("t1", &t1, "t1/D");
@@ -109,6 +109,8 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
   } else {
     // save the previous data object
     if (pd.getT0()>0) {
+      crun_id = pd.getRunId();
+      event_id = pd.getEventId();
       _parent = pd.getParent();
       t0 = pd.getT0();
       t1 = npd.getT0();

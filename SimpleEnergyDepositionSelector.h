@@ -104,6 +104,8 @@ public :
    //   ClassDef(SimpleEnergyDepositionSelector,0);
 private:
   int run_id;
+  int crun_id;
+  int event_id;
   string _parent;
   double t0;
   double t1;
