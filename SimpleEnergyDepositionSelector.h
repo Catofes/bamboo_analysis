@@ -100,6 +100,7 @@ public :
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
+   void setOutputName(const char * name);
    //   ClassDef(SimpleEnergyDepositionSelector,0);
 private:
   int run_id;
@@ -114,6 +115,7 @@ private:
   TTree * outTree;
   SimpleEnergyData pd;
   TRandom3 tr;
+  TString out_name;
 };
 
 #endif

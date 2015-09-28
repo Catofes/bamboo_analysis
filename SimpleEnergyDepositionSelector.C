@@ -108,15 +108,17 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
     pd.mergeData(npd);
   } else {
     // save the previous data object
-    _parent = pd.getParent();
-    t0 = pd.getT0();
-    t1 = npd.getT0();
-    _energy = pd.getEnergy();
-    _energySmeared = tr.Gaus(_energy, 0.03*_energy);
-    _primaryX = pd.getPrimaryX();
-    _primaryY = pd.getPrimaryY();
-    _primaryZ = pd.getPrimaryZ();
-    outTree->Fill();
+    if (pd.getT0()>0) {
+      _parent = pd.getParent();
+      t0 = pd.getT0();
+      t1 = npd.getT0();
+      _energy = pd.getEnergy();
+      _energySmeared = tr.Gaus(_energy, 0.03*_energy);
+      _primaryX = pd.getPrimaryX();
+      _primaryY = pd.getPrimaryY();
+      _primaryZ = pd.getPrimaryZ();
+      outTree->Fill();
+    }
     pd = npd;
   }
   if (entry == fChain->GetTree()->GetEntries()) {
@@ -129,6 +131,7 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
     _primaryY = pd.getPrimaryY();
     _primaryZ = pd.getPrimaryZ();
     outTree->Fill();
+    pd.setT0(-1);
   }
   return kTRUE;
 }
@@ -139,7 +142,7 @@ void SimpleEnergyDepositionSelector::SlaveTerminate()
    // have been processed. When running with PROOF SlaveTerminate() is called
    // on each slave server.
 
-  TFile fo("simple_out.root", "RECREATE");
+  TFile fo(out_name.Data(), "RECREATE");
   outTree->Write();
   fo.Close();
 }
@@ -150,4 +153,9 @@ void SimpleEnergyDepositionSelector::Terminate()
    // a query. It always runs on the client, it can be used to present
    // the results graphically or save the results to file.
 
+}
+
+void SimpleEnergyDepositionSelector::setOutputName(const char * name)
+{
+  out_name = name;
 }

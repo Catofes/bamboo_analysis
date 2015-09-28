@@ -15,7 +15,7 @@ int main (int argc, char * argv[])
   ch.Add(argv[1]);
 
   SimpleEnergyDepositionSelector * selector = new SimpleEnergyDepositionSelector();
-
+  selector->setOutputName(argv[2]);
   ch.Process(selector);
 
   return 0;
