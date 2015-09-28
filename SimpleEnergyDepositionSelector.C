@@ -26,7 +26,9 @@
 #include "SimpleEnergyDepositionSelector.h"
 #include <TH2.h>
 #include <TStyle.h>
+#include <iostream>
 
+using namespace std;
 
 void SimpleEnergyDepositionSelector::Begin(TTree * /*tree*/)
 {
@@ -46,6 +48,20 @@ void SimpleEnergyDepositionSelector::SlaveBegin(TTree * /*tree*/)
 
    TString option = GetOption();
 
+   run_id = 0;
+   outTree = new TTree("simple_out", "Simple Out Tree");
+   outTree->Branch("runId", &run_id, "runId/I");
+   outTree->Branch("eventId", &eventId, "eventId/I");
+   outTree->Branch("parent", &_parent);
+   outTree->Branch("t0", &t0, "t0/D");
+   outTree->Branch("t1", &t1, "t1/D");
+   outTree->Branch("energy", &_energy, "energy/D");
+   outTree->Branch("energySmeared", &_energySmeared, "energySmeared/D");
+   outTree->Branch("primaryX", &_primaryX, "primaryX/D");
+   outTree->Branch("primaryY", &_primaryY, "primaryY/D");
+   outTree->Branch("primaryZ", &_primaryZ, "primaryZ/D");
+   t0 = -1;
+   tr.SetSeed(0);
 }
 
 Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
@@ -67,9 +83,54 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
    // Use fStatus to set the return value of TTree::Process().
    //
    // The return value is currently not used.
+  if (entry == 0) {
+    cout << fChain->GetTree()->GetDirectory()->GetName() << endl;
+    run_id++;
+  }
 
+  fChain->GetTree()->GetEntry(entry);
 
-   return kTRUE;
+  SimpleEnergyData npd;
+  npd.setRunId(run_id);
+  npd.setEventId(eventId);
+  npd.setEnergy(totalEnergy);
+  npd.setT0((*td)[0]);
+  npd.setParent((*primaryType)[0]);
+  npd.setPrimaryX((*primaryX)[0]);
+  npd.setPrimaryY((*primaryY)[0]);
+  npd.setPrimaryZ((*primaryZ)[0]);
+
+  // 200 ms window
+  if (pd.getRunId() == npd.getRunId()
+      && pd.getEventId() == npd.getEventId()
+      && pd.getT0()>0 && npd.getT0() < 0.2) {
+    // within the window, merge the two data.
+    pd.mergeData(npd);
+  } else {
+    // save the previous data object
+    _parent = pd.getParent();
+    t0 = pd.getT0();
+    t1 = npd.getT0();
+    _energy = pd.getEnergy();
+    _energySmeared = tr.Gaus(_energy, 0.03*_energy);
+    _primaryX = pd.getPrimaryX();
+    _primaryY = pd.getPrimaryY();
+    _primaryZ = pd.getPrimaryZ();
+    outTree->Fill();
+    pd = npd;
+  }
+  if (entry == fChain->GetTree()->GetEntries()) {
+    _parent = pd.getParent();
+    t0 = pd.getT0();
+    t1 = pd.getT0();
+    _energy = pd.getEnergy();
+    _energySmeared = tr.Gaus(_energy, 0.03*_energy);
+    _primaryX = pd.getPrimaryX();
+    _primaryY = pd.getPrimaryY();
+    _primaryZ = pd.getPrimaryZ();
+    outTree->Fill();
+  }
+  return kTRUE;
 }
 
 void SimpleEnergyDepositionSelector::SlaveTerminate()
@@ -78,6 +139,9 @@ void SimpleEnergyDepositionSelector::SlaveTerminate()
    // have been processed. When running with PROOF SlaveTerminate() is called
    // on each slave server.
 
+  TFile fo("simple_out.root", "RECREATE");
+  outTree->Write();
+  fo.Close();
 }
 
 void SimpleEnergyDepositionSelector::Terminate()

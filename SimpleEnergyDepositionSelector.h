@@ -12,11 +12,15 @@
 #include <TChain.h>
 #include <TFile.h>
 #include <TSelector.h>
-
+#include <TRandom3.h>
 // Header file for the classes stored in the TTree if any.
 #include <vector>
-#include <vector>
-#include <vector>
+#include <string>
+
+#include "SimpleEnergyData.hh"
+
+using std::vector;
+using std::string;
 
 // Fixed size dimensions of array or collections stored in the TTree if any.
 
@@ -96,7 +100,20 @@ public :
    virtual void    SlaveTerminate();
    virtual void    Terminate();
 
-   ClassDef(SimpleEnergyDepositionSelector,0);
+   //   ClassDef(SimpleEnergyDepositionSelector,0);
+private:
+  int run_id;
+  string _parent;
+  double t0;
+  double t1;
+  double _energy;
+  double _energySmeared;
+  double _primaryX;
+  double _primaryY;
+  double _primaryZ;
+  TTree * outTree;
+  SimpleEnergyData pd;
+  TRandom3 tr;
 };
 
 #endif

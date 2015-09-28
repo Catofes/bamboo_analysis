@@ -34,5 +34,8 @@ ADD_EXECUTABLE(pea_cuboid pea_cuboid.C PEASelector.C)
 TARGET_LINK_LIBRARIES (pea_cuboid ${ROOT_LIBRARIES})
 INSTALL(TARGETS pea_cuboid DESTINATION bin)
 
+ADD_EXECUTABLE(simpleSelector simpleSelector.C SimpleEnergyData.cc SimpleEnergyDepositionSelector.C)
+TARGET_LINK_LIBRARIES (simpleSelector ${ROOT_LIBRARIES})
+
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
