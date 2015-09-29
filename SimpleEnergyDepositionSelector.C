@@ -126,6 +126,11 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
       t1 = npd.getT0();
       _energy = pd.getEnergy();
       _energySmeared = tr.Gaus(_energy, 0.03*_energy);
+      _energySmear12p5 = tr.Gaus(_energy, smearFactor*12.5);
+      _energySmear25 = tr.Gaus(_energy, smearFactor*25);
+      _energySmear50 = tr.Gaus(_energy, smearFactor*50);
+      _energySmear75 = tr.Gaus(_energy, smearFactor*75);
+      _energySmear100 = tr.Gaus(_energy, smearFactor*100);
       _primaryX = pd.getPrimaryX();
       _primaryY = pd.getPrimaryY();
       _primaryZ = pd.getPrimaryZ();
