@@ -57,6 +57,11 @@ void SimpleEnergyDepositionSelector::SlaveBegin(TTree * /*tree*/)
    outTree->Branch("t1", &t1, "t1/D");
    outTree->Branch("energy", &_energy, "energy/D");
    outTree->Branch("energySmeared", &_energySmeared, "energySmeared/D");
+   outTree->Branch("energySmear12.5", &_energySmear12p5, "energySmear12.5/D");
+   outTree->Branch("energySmear25", &_energySmear25, "energySmeared25/D");
+   outTree->Branch("energySmear50", &_energySmear50, "energySmeared50/D");
+   outTree->Branch("energySmear75", &_energySmear75, "energySmeared75/D");
+   outTree->Branch("energySmear100", &_energySmear100, "energySmear100/D");
    outTree->Branch("primaryX", &_primaryX, "primaryX/D");
    outTree->Branch("primaryY", &_primaryY, "primaryY/D");
    outTree->Branch("primaryZ", &_primaryZ, "primaryZ/D");
@@ -100,6 +105,7 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
   npd.setPrimaryY((*primaryY)[0]);
   npd.setPrimaryZ((*primaryZ)[0]);
 
+  double smearFactor = 0.425;
   // 200 ms window
   if (pd.getRunId() == npd.getRunId()
       && pd.getEventId() == npd.getEventId()
@@ -133,6 +139,11 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
     t1 = pd.getT0();
     _energy = pd.getEnergy();
     _energySmeared = tr.Gaus(_energy, 0.03*_energy);
+    _energySmear12p5 = tr.Gaus(_energy, smearFactor*12.5);
+    _energySmear25 = tr.Gaus(_energy, smearFactor*25);
+    _energySmear50 = tr.Gaus(_energy, smearFactor*50);
+    _energySmear75 = tr.Gaus(_energy, smearFactor*75);
+    _energySmear100 = tr.Gaus(_energy, smearFactor*100);
     _primaryX = pd.getPrimaryX();
     _primaryY = pd.getPrimaryY();
     _primaryZ = pd.getPrimaryZ();

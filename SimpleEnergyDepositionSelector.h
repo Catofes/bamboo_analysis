@@ -111,6 +111,11 @@ private:
   double t1;
   double _energy;
   double _energySmeared;
+  double _energySmear12p5;
+  double _energySmear25;
+  double _energySmear50;
+  double _energySmear75;
+  double _energySmear100;
   double _primaryX;
   double _primaryY;
   double _primaryZ;
