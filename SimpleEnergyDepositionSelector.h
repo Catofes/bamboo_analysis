@@ -103,6 +103,13 @@ public :
    void setOutputName(const char * name);
    //   ClassDef(SimpleEnergyDepositionSelector,0);
 private:
+
+  // calculate the maximum hit distance within this entry
+  void calculateHitDistance();
+
+  // calculate the maximum hit distance within this entry and previous entry.
+  void calculateHitDistance(Long64_t entry);
+
   int run_id;
   int crun_id;
   int event_id;
@@ -110,18 +117,15 @@ private:
   double t0;
   double t1;
   double _energy;
-  double _energySmeared;
-  double _energySmear12p5;
-  double _energySmear25;
-  double _energySmear50;
-  double _energySmear75;
-  double _energySmear100;
+  double _maxDx;
+  double _maxDy;
+  double _maxDz;
+  double _maxDd;
   double _primaryX;
   double _primaryY;
   double _primaryZ;
   TTree * outTree;
   SimpleEnergyData pd;
-  TRandom3 tr;
   TString out_name;
 };
 

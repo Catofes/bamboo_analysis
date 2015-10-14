@@ -26,6 +26,8 @@
 #include "SimpleEnergyDepositionSelector.h"
 #include <TH2.h>
 #include <TStyle.h>
+#include <TMath.h>
+#include <TString.h>
 #include <iostream>
 
 using namespace std;
@@ -56,17 +58,14 @@ void SimpleEnergyDepositionSelector::SlaveBegin(TTree * /*tree*/)
    outTree->Branch("t0", &t0, "t0/D");
    outTree->Branch("t1", &t1, "t1/D");
    outTree->Branch("energy", &_energy, "energy/D");
-   outTree->Branch("energySmeared", &_energySmeared, "energySmeared/D");
-   outTree->Branch("energySmear12.5", &_energySmear12p5, "energySmear12.5/D");
-   outTree->Branch("energySmear25", &_energySmear25, "energySmeared25/D");
-   outTree->Branch("energySmear50", &_energySmear50, "energySmeared50/D");
-   outTree->Branch("energySmear75", &_energySmear75, "energySmeared75/D");
-   outTree->Branch("energySmear100", &_energySmear100, "energySmear100/D");
+   outTree->Branch("maxDx", &_maxDx, "maxDx/D");
+   outTree->Branch("maxDy", &_maxDy, "maxDy/D");
+   outTree->Branch("maxDz", &_maxDz, "maxDz/D");
+   outTree->Branch("maxDd", &_maxDd, "maxDd/D");
    outTree->Branch("primaryX", &_primaryX, "primaryX/D");
    outTree->Branch("primaryY", &_primaryY, "primaryY/D");
    outTree->Branch("primaryZ", &_primaryZ, "primaryZ/D");
    t0 = -1;
-   tr.SetSeed(0);
 }
 
 Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
@@ -95,6 +94,7 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
 
   fChain->GetTree()->GetEntry(entry);
 
+  // create the new simple event data object for this entry
   SimpleEnergyData npd;
   npd.setRunId(run_id);
   npd.setEventId(eventId);
@@ -105,8 +105,7 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
   npd.setPrimaryY((*primaryY)[0]);
   npd.setPrimaryZ((*primaryZ)[0]);
 
-  double smearFactor = 0.425;
-  // 200 ms window
+  // check the 200 ms window
   if (pd.getRunId() == npd.getRunId()
       && pd.getEventId() == npd.getEventId()
       && pd.getT0()>0 && npd.getT0() < 0.2
@@ -116,6 +115,8 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
 	  )){
     // within the window, merge the two data.
     pd.mergeData(npd);
+    // calculate the hit distance in the two entries.
+    calculateHitDistance(entry);
   } else {
     // save the previous data object
     if (pd.getT0()>0) {
@@ -125,17 +126,13 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
       t0 = pd.getT0();
       t1 = npd.getT0();
       _energy = pd.getEnergy();
-      _energySmeared = tr.Gaus(_energy, 0.03*_energy);
-      _energySmear12p5 = tr.Gaus(_energy, smearFactor*12.5);
-      _energySmear25 = tr.Gaus(_energy, smearFactor*25);
-      _energySmear50 = tr.Gaus(_energy, smearFactor*50);
-      _energySmear75 = tr.Gaus(_energy, smearFactor*75);
-      _energySmear100 = tr.Gaus(_energy, smearFactor*100);
       _primaryX = pd.getPrimaryX();
       _primaryY = pd.getPrimaryY();
       _primaryZ = pd.getPrimaryZ();
       outTree->Fill();
     }
+    // calculate the maximum hit distance
+    calculateHitDistance();
     pd = npd;
   }
   if (entry == fChain->GetTree()->GetEntries()) {
@@ -143,12 +140,6 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
     t0 = pd.getT0();
     t1 = pd.getT0();
     _energy = pd.getEnergy();
-    _energySmeared = tr.Gaus(_energy, 0.03*_energy);
-    _energySmear12p5 = tr.Gaus(_energy, smearFactor*12.5);
-    _energySmear25 = tr.Gaus(_energy, smearFactor*25);
-    _energySmear50 = tr.Gaus(_energy, smearFactor*50);
-    _energySmear75 = tr.Gaus(_energy, smearFactor*75);
-    _energySmear100 = tr.Gaus(_energy, smearFactor*100);
     _primaryX = pd.getPrimaryX();
     _primaryY = pd.getPrimaryY();
     _primaryZ = pd.getPrimaryZ();
@@ -180,4 +171,119 @@ void SimpleEnergyDepositionSelector::Terminate()
 void SimpleEnergyDepositionSelector::setOutputName(const char * name)
 {
   out_name = name;
+}
+
+void SimpleEnergyDepositionSelector::calculateHitDistance()
+{
+  _maxDx = 0;
+  _maxDy = 0;
+  _maxDz = 0;
+  _maxDd = 0;
+
+  Double_t maxX(-10000), maxY(-10000), maxZ(-10000),
+    minX(10000), minY(10000), minZ(10000);
+  Double_t d(0);
+  for (Int_t i=0; i<nHits; ++i) {
+    if ((*xd)[i]>maxX) {
+      maxX = (*xd)[i];
+    }
+    if ((*yd)[i]>maxY) {
+      maxY = (*yd)[i];
+    }
+    if ((*zd)[i]>maxZ) {
+      maxZ = (*zd)[i];
+    }
+    if ((*xd)[i]<minX) {
+      minX = (*xd)[i];
+    }
+    if ((*xd)[i]<minX) {
+      minX = (*xd)[i];
+    }
+    if ((*xd)[i]<minX) {
+      minX = (*xd)[i];
+    }
+    for (Int_t j=1; j<nHits; ++j) {
+      d = ((*xd)[i] - (*xd)[j])*((*xd)[i] - (*xd)[j]) + ((*yd)[i] - (*yd)[j])*((*yd)[i] - (*yd)[j]) + ((*zd)[i] - (*zd)[j])*((*zd)[i] - (*zd)[j]);
+      if (d>_maxDd)
+        _maxDd =d;
+    }
+  }
+  _maxDx = maxX - minX;
+  _maxDy = maxY - minY;
+  _maxDz = maxZ - minZ;
+  _maxDd = TMath::Sqrt(_maxDd);
+}
+
+void SimpleEnergyDepositionSelector::calculateHitDistance(Long64_t entry)
+{
+  _maxDx = 0;
+  _maxDy = 0;
+  _maxDz = 0;
+  _maxDd = 0;
+
+  vector<double> xv, yv, zv;
+  Double_t maxX(-10000), maxY(-10000), maxZ(-10000),
+    minX(10000), minY(10000), minZ(10000);
+  Double_t d;
+  for (Int_t i=0; i<nHits; ++i) {
+    if ((*xd)[i]>maxX) {
+      maxX = (*xd)[i];
+    }
+    if ((*yd)[i]>maxY) {
+      maxY = (*yd)[i];
+    }
+    if ((*zd)[i]>maxZ) {
+      maxZ = (*zd)[i];
+    }
+    if ((*xd)[i]<minX) {
+      minX = (*xd)[i];
+    }
+    if ((*xd)[i]<minX) {
+      minX = (*xd)[i];
+    }
+    if ((*xd)[i]<minX) {
+      minX = (*xd)[i];
+    }
+    xv.push_back((*xd)[i]);
+    yv.push_back((*yd)[i]);
+    zv.push_back((*zd)[i]);
+  }
+
+  // load the previous entry
+  fChain -> GetTree() -> GetEntry(entry - 1);
+  for (Int_t i=0; i<nHits; ++i) {
+    if ((*xd)[i]>maxX) {
+      maxX = (*xd)[i];
+    }
+    if ((*yd)[i]>maxY) {
+      maxY = (*yd)[i];
+    }
+    if ((*zd)[i]>maxZ) {
+      maxZ = (*zd)[i];
+    }
+    if ((*xd)[i]<minX) {
+      minX = (*xd)[i];
+    }
+    if ((*xd)[i]<minX) {
+      minX = (*xd)[i];
+    }
+    if ((*xd)[i]<minX) {
+      minX = (*xd)[i];
+    }
+    xv.push_back((*xd)[i]);
+    yv.push_back((*yd)[i]);
+    zv.push_back((*zd)[i]);
+  }
+
+  for (size_t i=0; i<xv.size(); ++i) {
+    for (size_t j=0; j<xv.size(); ++j) {
+      d = (xv[i] - xv[j])*(xv[i] - xv[j]) + (yv[i] - yv[j])*(yv[i] - yv[j]) + (zv[i] - zv[j])*(zv[i] - zv[j]);
+      if (d>_maxDd)
+        _maxDd = d;
+    }
+  }
+  _maxDx = maxX - minX;
+  _maxDy = maxY - minY;
+  _maxDz = maxZ - minZ;
+  _maxDd = TMath::Sqrt(_maxDd);
 }

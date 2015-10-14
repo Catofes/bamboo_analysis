@@ -1,4 +1,4 @@
-PROJECT(Bamboo_II_Analysis)
+PROJECT(Bamboo_III_Analysis)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
@@ -20,8 +20,8 @@ SET(CMAKE_CXX_FLAGS "-std=c++0x -g")
 
 # link with root
 # target selector from bamboo_ii
-ADD_EXECUTABLE(selector selector.C DepositionSelector.C EnergyDeposition.C)
-TARGET_LINK_LIBRARIES (selector ${ROOT_LIBRARIES})
+#ADD_EXECUTABLE(selector selector.C DepositionSelector.C EnergyDeposition.C)
+#TARGET_LINK_LIBRARIES (selector ${ROOT_LIBRARIES})
 
 # target flux_analysis to analyze the angular distribution and
 # energy distribution of flux

@@ -1,2 +1,10 @@
 build/
 *~
+GPATH
+GRTAGS
+GSYMS
+GTAGS
+#*
+.#*
+*.so
+*_d
