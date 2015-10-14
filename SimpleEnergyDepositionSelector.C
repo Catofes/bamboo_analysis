@@ -196,11 +196,11 @@ void SimpleEnergyDepositionSelector::calculateHitDistance()
     if ((*xd)[i]<minX) {
       minX = (*xd)[i];
     }
-    if ((*xd)[i]<minX) {
-      minX = (*xd)[i];
+    if ((*yd)[i]<minY) {
+      minY = (*yd)[i];
     }
-    if ((*xd)[i]<minX) {
-      minX = (*xd)[i];
+    if ((*zd)[i]<minZ) {
+      minZ = (*zd)[i];
     }
     for (Int_t j=1; j<nHits; ++j) {
       d = ((*xd)[i] - (*xd)[j])*((*xd)[i] - (*xd)[j]) + ((*yd)[i] - (*yd)[j])*((*yd)[i] - (*yd)[j]) + ((*zd)[i] - (*zd)[j])*((*zd)[i] - (*zd)[j]);
@@ -238,11 +238,11 @@ void SimpleEnergyDepositionSelector::calculateHitDistance(Long64_t entry)
     if ((*xd)[i]<minX) {
       minX = (*xd)[i];
     }
-    if ((*xd)[i]<minX) {
-      minX = (*xd)[i];
+    if ((*yd)[i]<minY) {
+      minY = (*yd)[i];
     }
-    if ((*xd)[i]<minX) {
-      minX = (*xd)[i];
+    if ((*zd)[i]<minZ) {
+      minZ = (*zd)[i];
     }
     xv.push_back((*xd)[i]);
     yv.push_back((*yd)[i]);
@@ -264,11 +264,11 @@ void SimpleEnergyDepositionSelector::calculateHitDistance(Long64_t entry)
     if ((*xd)[i]<minX) {
       minX = (*xd)[i];
     }
-    if ((*xd)[i]<minX) {
-      minX = (*xd)[i];
+    if ((*yd)[i]<minY) {
+      minY = (*yd)[i];
     }
-    if ((*xd)[i]<minX) {
-      minX = (*xd)[i];
+    if ((*zd)[i]<minZ) {
+      minZ = (*zd)[i];
     }
     xv.push_back((*xd)[i]);
     yv.push_back((*yd)[i]);
