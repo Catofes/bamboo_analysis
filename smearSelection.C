@@ -129,12 +129,13 @@ int main(int argc, char * argv[])
   count_tree->Branch("ns_0_5", &ns_0_5, "ns_0_5/I");
   count_tree->Branch("ns_1", &ns_1, "ns_1/I");
   count_tree->Branch("ns_3", &ns_3, "ns_3/I");
+  double times = 6.0;
   for (long i=0; i<nEntries; ++i) {
     tree->GetEntry(i);
     e_smear_0_5 = 0;
     e_smear_1 = 0;
     e_smear_3 = 0;
-    if (energy>Q_value-3*sigma_0_5 && energy<Q_value+3*sigma_0_5) {
+    if (energy>Q_value-times*sigma_0_5 && energy<Q_value+times*sigma_0_5) {
       e_smear_0_5 = smearEnergy(energy, sigma_0_5);
       if (energy>Q_value-2*sigma_0_5 && energy<Q_value+2*sigma_0_5) {
 	n_0_5++;
@@ -143,7 +144,7 @@ int main(int argc, char * argv[])
 	ns_0_5++;
       }
     }
-    if (energy>Q_value-3*sigma_1 && energy<Q_value+3*sigma_1) {
+    if (energy>Q_value-times*sigma_1 && energy<Q_value+times*sigma_1) {
       e_smear_1 = smearEnergy(energy, sigma_1);
       if (energy>Q_value-2*sigma_1 && energy<Q_value+2*sigma_1) {
 	n_1++;
@@ -152,7 +153,7 @@ int main(int argc, char * argv[])
 	ns_1++;
       }
     }
-    if (energy>Q_value-3*sigma_3 && energy<Q_value+3*sigma_3) {
+    if (energy>Q_value-times*sigma_3 && energy<Q_value+times*sigma_3) {
       e_smear_3 = smearEnergy(energy, sigma_3);
       if (energy>Q_value-2*sigma_3 && energy<Q_value+2*sigma_3) {
 	n_3++;
@@ -178,19 +179,19 @@ int main(int argc, char * argv[])
     ns_3 = 0;
     for (size_t j=0; j<es.size(); ++j) {
       double e = es[j];
-      if (e>Q_value-3*sigma_0_5&&e<Q_value+3*sigma_0_5) {
+      if (e>Q_value-times*sigma_0_5&&e<Q_value+times*sigma_0_5) {
 	double ex = smearEnergy(e, sigma_0_5);
 	if (ex>Q_value-2*sigma_0_5&&e<Q_value+2*sigma_0_5) {
 	  ns_0_5++;
 	}
       }
-      if (e>Q_value-3*sigma_1&&e<Q_value+3*sigma_1) {
+      if (e>Q_value-times*sigma_1&&e<Q_value+times*sigma_1) {
 	double ex = smearEnergy(e, sigma_1);
 	if (ex>Q_value-2*sigma_1&&e<Q_value+2*sigma_1) {
 	  ns_1++;
 	}
       }
-      if (e>Q_value-3*sigma_3&&e<Q_value+3*sigma_3) {
+      if (e>Q_value-times*sigma_3&&e<Q_value+times*sigma_3) {
 	double ex = smearEnergy(e, sigma_3);
 	if (ex>Q_value-2*sigma_3&&e<Q_value+2*sigma_3) {
 	  ns_3++;
