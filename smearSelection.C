@@ -89,9 +89,10 @@ int main(int argc, char * argv[])
   TTree * out_tree = new TTree ("smear_e", "smeared energy");
   // output variables
   double e_smear_0_5, e_smear_1, e_smear_3;
+  string pparent;
   out_tree->Branch("runId", &run_id, "runId/I");
   out_tree->Branch("eventId", &event_id, "eventId/I");
-  //  out_tree->Branch("parent", &parent);
+  out_tree->Branch("parent", &pparent);
   out_tree->Branch("energy", &energy, "energy/D");
   out_tree->Branch("e_smear_0_5", &e_smear_0_5, "e_smear_0_5/D");
   out_tree->Branch("e_smear_1", &e_smear_1, "e_smear_1/D");
@@ -130,8 +131,8 @@ int main(int argc, char * argv[])
     }
     if (energy>Q_value-3*sigma_3 && energy<Q_value+3*sigma_3) {
       e_smear_3 = smearEnergy(energy, sigma_3);
-      //      pparent = * parent;
-      cout << event_id << " " << * parent << endl;
+      pparent = * parent;
+      //      cout << event_id << " " << * parent << endl;
       out_tree->Fill();
     }
   }
