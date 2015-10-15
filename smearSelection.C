@@ -125,10 +125,10 @@ int main(int argc, char * argv[])
   int n_1(0), ns_1(0);
   int n_3(0), ns_3(0);
 
-  // TTree * count_tree = new TTree ("count_tree", "tree of counts");
-  // count_tree->Branch("ns_0_5", &ns_0_5, "ns_0_5/I");
-  // count_tree->Branch("ns_1", &ns_1, "ns_1/I");
-  // count_tree->Branch("ns_3", &ns_3, "ns_3/I");
+  TTree * count_tree = new TTree ("count_tree", "tree of counts");
+  count_tree->Branch("ns_0_5", &ns_0_5, "ns_0_5/I");
+  count_tree->Branch("ns_1", &ns_1, "ns_1/I");
+  count_tree->Branch("ns_3", &ns_3, "ns_3/I");
   for (long i=0; i<nEntries; ++i) {
     tree->GetEntry(i);
     e_smear_0_5 = 0;
@@ -172,7 +172,34 @@ int main(int argc, char * argv[])
   cout << "3.0%: " << n_3 << " (original), " << ns_3 << " (smeared)." << endl;
   out_tree->Write();
   // further simulation
-  
+  for (int i=0; i<500; ++i) {
+    ns_0_5 = 0;
+    ns_1 = 0;
+    ns_3 = 0;
+    for (size_t j=0; j<es.size(); ++j) {
+      double e = es[j];
+      if (e>Q_value-3*sigma_0_5&&e<Q_value+3*sigma_0_5) {
+	double ex = smearEnergy(e, sigma_0_5);
+	if (ex>Q_value-2*sigma_0_5&&e<Q_value+2*sigma_0_5) {
+	  ns_0_5++;
+	}
+      }
+      if (e>Q_value-3*sigma_1&&e<Q_value+3*sigma_1) {
+	double ex = smearEnergy(e, sigma_1);
+	if (ex>Q_value-2*sigma_1&&e<Q_value+2*sigma_1) {
+	  ns_1++;
+	}
+      }
+      if (e>Q_value-3*sigma_3&&e<Q_value+3*sigma_3) {
+	double ex = smearEnergy(e, sigma_3);
+	if (ex>Q_value-2*sigma_3&&e<Q_value+2*sigma_3) {
+	  ns_3++;
+	}
+      }
+    }
+    count_tree->Fill();
+  }
+  count_tree->Write();
   fo.Close();
   f.Close();
 }
