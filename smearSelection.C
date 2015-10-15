@@ -5,9 +5,11 @@
 #include <TRandom3.h>
 #include <TCanvas.h>
 #include <TH1D.h>
+#include <TH1I.h>
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -118,6 +120,15 @@ int main(int argc, char * argv[])
   // }
   // th_esm->Draw();
   // c1.Print("esm.png");
+  vector<double> es;		// selected energy
+  int n_0_5(0), ns_0_5(0);
+  int n_1(0), ns_1(0);
+  int n_3(0), ns_3(0);
+
+  // TTree * count_tree = new TTree ("count_tree", "tree of counts");
+  // count_tree->Branch("ns_0_5", &ns_0_5, "ns_0_5/I");
+  // count_tree->Branch("ns_1", &ns_1, "ns_1/I");
+  // count_tree->Branch("ns_3", &ns_3, "ns_3/I");
   for (long i=0; i<nEntries; ++i) {
     tree->GetEntry(i);
     e_smear_0_5 = 0;
@@ -125,18 +136,43 @@ int main(int argc, char * argv[])
     e_smear_3 = 0;
     if (energy>Q_value-3*sigma_0_5 && energy<Q_value+3*sigma_0_5) {
       e_smear_0_5 = smearEnergy(energy, sigma_0_5);
+      if (energy>Q_value-2*sigma_0_5 && energy<Q_value+2*sigma_0_5) {
+	n_0_5++;
+      }
+      if (e_smear_0_5>Q_value-2*sigma_0_5&&e_smear_0_5<Q_value+2*sigma_0_5) {
+	ns_0_5++;
+      }
     }
     if (energy>Q_value-3*sigma_1 && energy<Q_value+3*sigma_1) {
       e_smear_1 = smearEnergy(energy, sigma_1);
+      if (energy>Q_value-2*sigma_1 && energy<Q_value+2*sigma_1) {
+	n_1++;
+      }
+      if (e_smear_1>Q_value-2*sigma_1&&e_smear_1<Q_value+2*sigma_1) {
+	ns_1++;
+      }
     }
     if (energy>Q_value-3*sigma_3 && energy<Q_value+3*sigma_3) {
       e_smear_3 = smearEnergy(energy, sigma_3);
+      if (energy>Q_value-2*sigma_3 && energy<Q_value+2*sigma_3) {
+	n_3++;
+      }
+      if (e_smear_3>Q_value-2*sigma_3&&e_smear_3<Q_value+2*sigma_3) {
+	ns_3++;
+      }
+      es.push_back(energy);
       pparent = * parent;
       //      cout << event_id << " " << * parent << endl;
       out_tree->Fill();
     }
   }
+  // print out the values
+  cout << "0.5%: " << n_0_5 << " (original), " << ns_0_5 << " (smeared)." << endl;
+  cout << "1.0%: " << n_1 << " (original), " << ns_1 << " (smeared)." << endl;
+  cout << "3.0%: " << n_3 << " (original), " << ns_3 << " (smeared)." << endl;
   out_tree->Write();
+  // further simulation
+  
   fo.Close();
   f.Close();
 }
