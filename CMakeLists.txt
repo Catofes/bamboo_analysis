@@ -16,7 +16,7 @@ LINK_DIRECTORIES (${ROOT_LIBRARY_DIR})
 SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 # std=c++0x
-SET(CMAKE_CXX_FLAGS "-std=c++0x -g")
+SET(CMAKE_CXX_FLAGS "-std=c++0x -Wall")
 
 # link with root
 # target selector from bamboo_ii

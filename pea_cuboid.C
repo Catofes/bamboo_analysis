@@ -22,7 +22,7 @@ int main (int argc, char * argv[])
   TString inputName;
   TString outputName;
   Double_t hw = 6;
-  Bool_t saveSurface = true;
+  //  Bool_t saveSurface = true;
   while (true) {
     const int option = getopt(argc, argv, "i:o:w:");
     if(option == -1) break;
