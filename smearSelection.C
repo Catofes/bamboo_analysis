@@ -6,6 +6,7 @@
 #include <TCanvas.h>
 #include <TH1D.h>
 #include <TH1I.h>
+#include <TF1.h>
 
 #include <iostream>
 #include <string>
@@ -19,6 +20,8 @@ double Q_value = 2457.83; // (keV)
 
 double getSigma(double fhwm);
 double smearEnergy(double e, double sigma);
+
+double smearFunc(double *x, double *p);
 
 TRandom3 tr;
 
@@ -124,17 +127,30 @@ int main(int argc, char * argv[])
   int n_0_5(0), ns_0_5(0);
   int n_1(0), ns_1(0);
   int n_3(0), ns_3(0);
+  double dn_0_5(0), dn_1(1), dn_3(2); // variable for n calculated from integration
 
   TTree * count_tree = new TTree ("count_tree", "tree of counts");
   count_tree->Branch("ns_0_5", &ns_0_5, "ns_0_5/I");
   count_tree->Branch("ns_1", &ns_1, "ns_1/I");
   count_tree->Branch("ns_3", &ns_3, "ns_3/I");
   double times = 6.0;
+  TF1 * f1 = new TF1("gaus_smear", smearFunc, 2200, 2700, 2);
   for (long i=0; i<nEntries; ++i) {
     tree->GetEntry(i);
     e_smear_0_5 = 0;
     e_smear_1 = 0;
     e_smear_3 = 0;
+    // calculate the integration of n
+    if (energy > 2200 && energy < 2700) {
+      f1->SetParameter(0, sigma_0_5);
+      f1->SetParameter(1, energy);
+      dn_0_5 += f1->Integral(Q_value-2*sigma_0_5, Q_value+2*sigma_0_5);
+      f1->SetParameter(0, sigma_1);
+      dn_1 += f1->Integral(Q_value-2*sigma_1, Q_value+2*sigma_1);
+      f1->SetParameter(0, sigma_3);
+      dn_3 += f1->Integral(Q_value-2*sigma_3, Q_value+2*sigma_3);
+    }
+    // end the calculation of integration
     if (energy>Q_value-times*sigma_0_5 && energy<Q_value+times*sigma_0_5) {
       e_smear_0_5 = smearEnergy(energy, sigma_0_5);
       if (energy>Q_value-2*sigma_0_5 && energy<Q_value+2*sigma_0_5) {
@@ -168,9 +184,9 @@ int main(int argc, char * argv[])
     }
   }
   // print out the values
-  cout << "0.5%: " << n_0_5 << " (original), " << ns_0_5 << " (smeared)." << endl;
-  cout << "1.0%: " << n_1 << " (original), " << ns_1 << " (smeared)." << endl;
-  cout << "3.0%: " << n_3 << " (original), " << ns_3 << " (smeared)." << endl;
+  cout << "0.5%: " << n_0_5 << " (original), " << ns_0_5 << " (smeared), " << dn_0_5 << "(smeared with integration)." << endl;
+  cout << "1.0%: " << n_1 << " (original), " << ns_1 << " (smeared), " << dn_1 << "(smeared with integration)." << endl;
+  cout << "3.0%: " << n_3 << " (original), " << ns_3 << " (smeared), " << dn_3 << "(smeared with integration)." << endl;
   out_tree->Write();
   // further simulation
   for (int i=0; i<500; ++i) {
@@ -213,4 +229,11 @@ double getSigma (double fhwm)
 double smearEnergy (double e, double sigma)
 {
   return tr.Gaus(e, sigma);
+}
+
+double smearFunc (double *x, double *p)
+{
+  // p[0] : sigma
+  // p[1] : smear value
+  return 1./TMath::Sqrt(2*TMath::Pi())/p[0] * TMath::Exp(-0.5*(x[0]-p[1])*(x[0]-p[1])/p[0]/p[0]);
 }
