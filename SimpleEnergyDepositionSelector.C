@@ -59,10 +59,12 @@ void SimpleEnergyDepositionSelector::SlaveBegin(TTree * /*tree*/)
    outTree->Branch("t0", &t0, "t0/D");
    outTree->Branch("t1", &t1, "t1/D");
    outTree->Branch("energy", &_energy, "energy/D");
-   outTree->Branch("maxDx", &_maxDx, "maxDx/D");
-   outTree->Branch("maxDy", &_maxDy, "maxDy/D");
-   outTree->Branch("maxDz", &_maxDz, "maxDz/D");
-   outTree->Branch("maxDd", &_maxDd, "maxDd/D");
+   if (calculateDis) {
+     outTree->Branch("maxDx", &_maxDx, "maxDx/D");
+     outTree->Branch("maxDy", &_maxDy, "maxDy/D");
+     outTree->Branch("maxDz", &_maxDz, "maxDz/D");
+     outTree->Branch("maxDd", &_maxDd, "maxDd/D");
+   }
    outTree->Branch("primaryX", &_primaryX, "primaryX/D");
    outTree->Branch("primaryY", &_primaryY, "primaryY/D");
    outTree->Branch("primaryZ", &_primaryZ, "primaryZ/D");
@@ -132,7 +134,9 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
     // within the window, merge the two data.
     pd.mergeData(npd);
     // calculate the hit distance in the two entries.
-    calculateHitDistance(entry);
+    if (calculateDis) {
+      calculateHitDistance(entry);
+    }
   } else {
     // save the previous data object
     if (pd.getT0()>0 && pd.getEnergy()>0) {
@@ -148,7 +152,9 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
       outTree->Fill();
     }
     // calculate the maximum hit distance
-    calculateHitDistance();
+    if (calculateDis) {
+      calculateHitDistance();
+    }
     pd = npd;
   }
   if (entry == fChain->GetTree()->GetEntries()) {
@@ -303,6 +309,11 @@ void SimpleEnergyDepositionSelector::calculateHitDistance(Long64_t entry)
   _maxDy = maxY - minY;
   _maxDz = maxZ - minZ;
   _maxDd = TMath::Sqrt(_maxDd);
+}
+
+void SimpleEnergyDepositionSelector::enableDistance(bool b)
+{
+  calculateDis = b;
 }
 
 void SimpleEnergyDepositionSelector::enableFVCut(bool b)

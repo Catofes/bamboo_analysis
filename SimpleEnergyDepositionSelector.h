@@ -101,6 +101,7 @@ public :
    virtual void    Terminate();
 
    void setOutputName(const char * name);
+   void enableDistance(bool b);
    void enableFVCut(bool b);
    void setFVHeight(double h);
    void setFVRadius(double r);
@@ -136,6 +137,7 @@ private:
   double fvRadius;
   double fvRadiusSquare;
 
+  bool calculateDis;
   TFile *_fo;
 };
 

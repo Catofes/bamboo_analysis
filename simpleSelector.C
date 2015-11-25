@@ -14,10 +14,11 @@ int main (int argc, char * argv[])
   string output_name;
   stringstream ss;
   bool useFVCut = false;
+  bool calcuDis = false;
   double height(1600);
   double radius(687);
   while (true) {
-    const int option = getopt(argc, argv, "i:o:h:r:f");
+    const int option = getopt(argc, argv, "i:o:h:r:fd");
     if (option == -1) {
       break;
     }
@@ -41,11 +42,13 @@ int main (int argc, char * argv[])
       ss.str(optarg);
       ss >> radius;
       break;
+    case 'd':
+      calcuDis = true;
     }
   }
 
   if (input_name.empty() || output_name.empty()) {
-    cerr << "Usage: " << argv[0] << " -i input_file -o output_file [ -f -h height -r radius ]" << endl;
+    cerr << "Usage: " << argv[0] << " -i input_file -o output_file [ -f -h height -r radius -d]" << endl;
     return 1;
   }
 
@@ -55,6 +58,7 @@ int main (int argc, char * argv[])
   SimpleEnergyDepositionSelector * selector = new SimpleEnergyDepositionSelector();
   selector->setOutputName(output_name.c_str());
   selector->enableFVCut(useFVCut);
+  selector->enableDistance(calcuDis);
   if (useFVCut) {
     selector->setFVHeight(height);
     selector->setFVRadius(radius);
