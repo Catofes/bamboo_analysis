@@ -94,7 +94,8 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
   }
 
   fChain->GetTree()->GetEntry(entry);
-
+  if (nHits==0)
+    return kTRUE;
   // create the new simple event data object for this entry
   SimpleEnergyData npd;
   npd.setRunId(run_id);
