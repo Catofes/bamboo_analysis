@@ -101,6 +101,9 @@ public :
    virtual void    Terminate();
 
    void setOutputName(const char * name);
+   void enableFVCut(bool b);
+   void setFVHeight(double h);
+   void setFVRadius(double r);
    //   ClassDef(SimpleEnergyDepositionSelector,0);
 private:
 
@@ -127,6 +130,13 @@ private:
   TTree * outTree;
   SimpleEnergyData pd;
   TString out_name;
+
+  bool useFVCut;
+  double fvHeight;
+  double fvRadius;
+  double fvRadiusSquare;
+
+  TFile *_fo;
 };
 
 #endif

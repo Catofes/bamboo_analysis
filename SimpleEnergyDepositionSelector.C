@@ -51,6 +51,7 @@ void SimpleEnergyDepositionSelector::SlaveBegin(TTree * /*tree*/)
    TString option = GetOption();
 
    run_id = 0;
+   _fo = new TFile(out_name.Data(), "RECREATE");
    outTree = new TTree("simple_out", "Simple Out Tree");
    outTree->Branch("runId", &crun_id, "runId/I");
    outTree->Branch("eventId", &event_id, "eventId/I");
@@ -98,7 +99,21 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
   SimpleEnergyData npd;
   npd.setRunId(run_id);
   npd.setEventId(eventId);
-  npd.setEnergy(totalEnergy);
+  if (useFVCut) {
+    // calculate total energy deposited in FV
+    double e = 0;
+    for (int i=0; i<nHits; ++i) {
+      if (TMath::Abs((*zd)[i])>(fvHeight/2))
+        continue;
+      double r2 = (*xd)[i]*(*xd)[i] + (*yd)[i]*(*yd)[i];
+      if (r2 > fvRadiusSquare)
+        continue;
+      e += (*energy)[i];
+    }
+    npd.setEnergy(e);
+  } else {
+    npd.setEnergy(totalEnergy);
+  }
   npd.setT0((*td)[0]);
   npd.setParent((*primaryType)[0]);
   npd.setPrimaryX((*primaryX)[0]);
@@ -106,7 +121,7 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
   npd.setPrimaryZ((*primaryZ)[0]);
 
   // check the 200 ms window
-  if (pd.getRunId() == npd.getRunId()
+  if (npd.getEnergy()>0 && pd.getEnergy()>0 && pd.getRunId() == npd.getRunId()
       && pd.getEventId() == npd.getEventId()
       && pd.getT0()>0 && npd.getT0() < 0.2
       && ((pd.getParent().find("Rn220")==0 && npd.getParent().find("Po216")==0)
@@ -119,7 +134,7 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
     calculateHitDistance(entry);
   } else {
     // save the previous data object
-    if (pd.getT0()>0) {
+    if (pd.getT0()>0 && pd.getEnergy()>0) {
       crun_id = pd.getRunId();
       event_id = pd.getEventId();
       _parent = pd.getParent();
@@ -143,7 +158,9 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry)
     _primaryX = pd.getPrimaryX();
     _primaryY = pd.getPrimaryY();
     _primaryZ = pd.getPrimaryZ();
-    outTree->Fill();
+    if (_energy>0) {
+      outTree->Fill();
+    }
     pd.setT0(-1);
   }
   return kTRUE;
@@ -155,9 +172,8 @@ void SimpleEnergyDepositionSelector::SlaveTerminate()
    // have been processed. When running with PROOF SlaveTerminate() is called
    // on each slave server.
 
-  TFile fo(out_name.Data(), "RECREATE");
   outTree->Write();
-  fo.Close();
+  _fo->Close();
 }
 
 void SimpleEnergyDepositionSelector::Terminate()
@@ -286,4 +302,20 @@ void SimpleEnergyDepositionSelector::calculateHitDistance(Long64_t entry)
   _maxDy = maxY - minY;
   _maxDz = maxZ - minZ;
   _maxDd = TMath::Sqrt(_maxDd);
+}
+
+void SimpleEnergyDepositionSelector::enableFVCut(bool b)
+{
+  useFVCut = b;
+}
+
+void SimpleEnergyDepositionSelector::setFVHeight(double h)
+{
+  fvHeight = h;
+}
+
+void SimpleEnergyDepositionSelector::setFVRadius(double r)
+{
+  fvRadius = r;
+  fvRadiusSquare = r*r;
 }
