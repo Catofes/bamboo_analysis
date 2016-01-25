@@ -40,8 +40,8 @@
       <file leaf-file-name="SimpleEnergyDepositionSelector.C" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SimpleEnergyDepositionSelector.C">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.47027028">
-              <caret line="178" column="5" selection-start-line="178" selection-start-column="5" selection-end-line="178" selection-end-column="5" />
+            <state vertical-scroll-proportion="0.8810811">
+              <caret line="121" column="21" selection-start-line="121" selection-start-column="21" selection-end-line="121" selection-end-column="21" />
               <folding>
                 <element signature="e#1315#1358#0" expanded="true" />
               </folding>
@@ -53,7 +53,7 @@
         <entry file="file://$PROJECT_DIR$/SimpleEnergyDepositionSelector.h">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="162" column="7" selection-start-line="162" selection-start-column="7" selection-end-line="162" selection-end-column="7" />
+              <caret line="151" column="21" selection-start-line="151" selection-start-column="21" selection-end-line="151" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -362,15 +362,15 @@
     <entry file="file://$PROJECT_DIR$/SimpleEnergyDepositionSelector.h">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="162" column="7" selection-start-line="162" selection-start-column="7" selection-end-line="162" selection-end-column="7" />
+          <caret line="151" column="21" selection-start-line="151" selection-start-column="21" selection-end-line="151" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/SimpleEnergyDepositionSelector.C">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.47027028">
-          <caret line="178" column="5" selection-start-line="178" selection-start-column="5" selection-end-line="178" selection-end-column="5" />
+        <state vertical-scroll-proportion="0.8810811">
+          <caret line="121" column="21" selection-start-line="121" selection-start-column="21" selection-end-line="121" selection-end-column="21" />
           <folding>
             <element signature="e#1315#1358#0" expanded="true" />
           </folding>
