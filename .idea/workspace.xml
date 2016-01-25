@@ -15,6 +15,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a7170e6a-a0b2-43c4-8332-a4eb04a8f26d" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SimpleEnergyDepositionSelector.C" afterPath="$PROJECT_DIR$/SimpleEnergyDepositionSelector.C" />
     </list>
     <ignored path="bamboo_iii_analysis.iws" />
@@ -39,8 +40,8 @@
       <file leaf-file-name="SimpleEnergyDepositionSelector.C" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/SimpleEnergyDepositionSelector.C">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4018018">
-              <caret line="179" column="38" selection-start-line="179" selection-start-column="38" selection-end-line="179" selection-end-column="38" />
+            <state vertical-scroll-proportion="0.47027028">
+              <caret line="178" column="5" selection-start-line="178" selection-start-column="5" selection-end-line="178" selection-end-column="5" />
               <folding>
                 <element signature="e#1315#1358#0" expanded="true" />
               </folding>
@@ -368,8 +369,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/SimpleEnergyDepositionSelector.C">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4018018">
-          <caret line="179" column="38" selection-start-line="179" selection-start-column="38" selection-end-line="179" selection-end-column="38" />
+        <state vertical-scroll-proportion="0.47027028">
+          <caret line="178" column="5" selection-start-line="178" selection-start-column="5" selection-end-line="178" selection-end-column="5" />
           <folding>
             <element signature="e#1315#1358#0" expanded="true" />
           </folding>
