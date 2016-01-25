@@ -177,6 +177,7 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry) {
         }
         pd.setT0(-1);
     }
+    std::cout << _energy << std::endl;
     return kTRUE;
 }
 
