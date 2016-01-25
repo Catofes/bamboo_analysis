@@ -146,7 +146,7 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry) {
             _primaryY = pd.getPrimaryY();
             _primaryZ = pd.getPrimaryZ();
             //outTree->Fill();
-            std::cout << _energy << std::endl;
+            //std::cout << _energy << std::endl;
             if (_energy > 1500)
                 beamEvents++;
             else
@@ -168,7 +168,7 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry) {
         _primaryZ = pd.getPrimaryZ();
         if (_energy > 0) {
             //outTree->Fill();
-            std::cout << _energy << std::endl;
+            //std::cout << _energy << std::endl;
             if (_energy > 1500)
                 beamEvents++;
             else
