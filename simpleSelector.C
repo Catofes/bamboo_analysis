@@ -57,7 +57,7 @@ int main (int argc, char * argv[])
 
   SimpleEnergyDepositionSelector * selector = new SimpleEnergyDepositionSelector();
   selector->setOutputName(output_name.c_str());
-  //selector->enableFVCut(useFVCut);
+  selector->enableFVCut(false);
   //selector->enableDistance(calcuDis);
   //if (useFVCut) {
     //selector->setFVHeight(height);
