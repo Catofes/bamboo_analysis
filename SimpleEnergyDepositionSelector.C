@@ -119,7 +119,6 @@ Bool_t SimpleEnergyDepositionSelector::Process(Long64_t entry) {
     npd.setPrimaryX((*primaryX)[0]);
     npd.setPrimaryY((*primaryY)[0]);
     npd.setPrimaryZ((*primaryZ)[0]);
-    cout<<totalEnergy<<endl;
     // check the 200 ms window
     if (npd.getEnergy() > 0 && pd.getEnergy() > 0 && pd.getRunId() == npd.getRunId()
         && pd.getEventId() == npd.getEventId()
