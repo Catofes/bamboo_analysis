@@ -57,13 +57,14 @@ int main (int argc, char * argv[])
 
   SimpleEnergyDepositionSelector * selector = new SimpleEnergyDepositionSelector();
   selector->setOutputName(output_name.c_str());
-  selector->enableFVCut(useFVCut);
-  selector->enableDistance(calcuDis);
-  if (useFVCut) {
-    selector->setFVHeight(height);
-    selector->setFVRadius(radius);
-  }
+  //selector->enableFVCut(useFVCut);
+  //selector->enableDistance(calcuDis);
+  //if (useFVCut) {
+    //selector->setFVHeight(height);
+    //selector->setFVRadius(radius);
+  //}
   ch.Process(selector);
+  cout<<selector->beamEvents<<" "<<selector->silentEvents<<endl;
 
   return 0;
 }

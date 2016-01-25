@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="CPP_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/CMakeLists.txt" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FindROOT.cmake" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FluxSelector.C" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/FluxSelector.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/PEASelector.C" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/PEASelector.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/SimpleEnergyData.cc" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/SimpleEnergyData.hh" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/SimpleEnergyDepositionSelector.C" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/SimpleEnergyDepositionSelector.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/flux.C" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/pea_cuboid.C" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/simpleSelector.C" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/smearSelection.C" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library name="Header Search Paths">
+        <CLASSES>
+          <root url="file://$USER_HOME$/.CLion12/system/cmake/generated/3712740f/3712740f/Debug" />
+          <root url="file://$USER_HOME$/.CLion12/system/cmake/generated/3712740f/3712740f/MinSizeRel" />
+          <root url="file://$USER_HOME$/.CLion12/system/cmake/generated/3712740f/3712740f/RelWithDebInfo" />
+          <root url="file://$USER_HOME$/.CLion12/system/cmake/generated/3712740f/3712740f/Release" />
+          <root url="file:///usr/include" />
+          <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.3.0/include" />
+          <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.3.0/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.3.0/include/cilk" />
+          <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.3.0/include/sanitizer" />
+          <root url="file:///usr/local/include" />
+        </CLASSES>
+        <SOURCES>
+          <root url="file://$USER_HOME$/.CLion12/system/cmake/generated/3712740f/3712740f/Debug" />
+          <root url="file://$USER_HOME$/.CLion12/system/cmake/generated/3712740f/3712740f/MinSizeRel" />
+          <root url="file://$USER_HOME$/.CLion12/system/cmake/generated/3712740f/3712740f/RelWithDebInfo" />
+          <root url="file://$USER_HOME$/.CLion12/system/cmake/generated/3712740f/3712740f/Release" />
+          <root url="file:///usr/include" />
+          <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.3.0/include" />
+          <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.3.0/include-fixed" />
+          <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.3.0/include/cilk" />
+          <root url="file:///usr/lib/gcc/x86_64-unknown-linux-gnu/5.3.0/include/sanitizer" />
+          <root url="file:///usr/local/include" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+  </component>
+</module>
